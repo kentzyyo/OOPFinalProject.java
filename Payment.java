@@ -61,9 +61,8 @@ public class Payment{
 
     public double ComputePayment(){
         if (date > num){
-            double total = (amount + 40.76);
-            if (date == num);
-                double td = (amount + 0);
+            double total = (amount*.05);
+            return total;
 
               
         }
