@@ -102,7 +102,7 @@ public class Bill {
         System.out.println("Usage: " + usage);
         System.out.println("Penalty: " + penalty);
         System.out.println("Meter Number: " + meterNum);
-        System.out.println("KiloWatt per Hour: " + Bill.kiloWatHr);
+        System.out.println("KiloWatt per Hour: " + formerBill.kiloWatHr);
         System.out.println("Meter Reader: " + meterReader.getName());
         System.out.println();
     }
