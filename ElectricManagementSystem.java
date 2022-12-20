@@ -152,16 +152,31 @@ public class ElectricManagementSystem {
       // Either way, we just start with an empty list of consumers.
     }
 
+    boolean hasSelectedOption = false;
     while (true) {
-      
+      if (!hasSelectedOption) {
+        System.out.println("Welcome to CURUSEKO!");
+        try {
+          Thread.sleep(1000); // delay for 1000 milliseconds (1 second)
+        } catch (InterruptedException e) {
+          // do nothing
+        }
+        System.out.println("\npress Enter key");
+        scanner.nextLine();
+      }
 
       System.out.println("\n-----------CURUSEKO-----------");
       System.out.println("1. Register consumer");
       System.out.println("2. Process payment");
-      System.out.println("3. List consumers");
-      System.out.println("4. Exit");
+      System.out.println("3. Add to balance");
+      System.out.println("4. List consumers");
+      System.out.println("5. Exit");
       System.out.print("\nEnter choice: "); //
       int choice = scanner.nextInt();
+
+      if (choice == 1 || choice == 2 || choice == 3 || choice == 4 || choice == 5) {
+        hasSelectedOption = true;
+      }
 
       if (choice == 1) {
         // register a new consumer
@@ -194,8 +209,7 @@ public class ElectricManagementSystem {
           if (consumer == null){
             System.out.println("Consumer not found.");
           } else {
-            System.out.print("Enter payment amount: ");
-
+            System.out.print("Enter Bill amount: ");
             double amount = scanner.nextDouble();
             System.out.println("\nSelect mode of payment:");
             System.out.println("1. Cash");
@@ -215,12 +229,36 @@ public class ElectricManagementSystem {
               continue;
             }
             Payment payment = new Payment(consumer, amount, "today", mode);
-            consumer.setBalance(payment.getAmount() - consumer.getBalance() );
+            consumer.setBalance(consumer.getBalance() - payment.getAmount());
             System.out.println("\nPayment of Php " + payment.getAmount() + " received from " + consumer.getName() + " by " + payment.getMode());
             System.out.println("New balance: Php " + consumer.getBalance());
           }
         }
       } else if (choice == 3) {
+        // add to balance
+        if (consumers.isEmpty()) {
+          System.out.println("\nNo consumers registered.");
+        } else {
+          System.out.print("Enter consumer account number: ");
+          int accountNumber = scanner.nextInt();
+          Consumer consumer = null;
+          for (Consumer c : consumers) {
+            if (c.getAccountNumber() == accountNumber) {
+              consumer = c;
+              break;
+            }
+          }
+          if (consumer == null){
+            System.out.println("Consumer not found.");
+          } else {
+            System.out.print("Enter amount to add to balance: ");
+            double amount = scanner.nextDouble();
+            consumer.setBalance(consumer.getBalance() + amount);
+            System.out.println("\nAmount added to balance.");
+            System.out.println("New balance: Php " + consumer.getBalance());
+          }
+        }
+      } else if (choice == 4) {
         // list all consumers
         if (consumers.isEmpty()) {
           System.out.println("\nNo consumers registered.");
@@ -229,18 +267,29 @@ public class ElectricManagementSystem {
           System.out.println("Name"+"\t\t"+"Address"+"\t\t"+"Account"+"\t\t"+"Balance");
           System.out.println();
           for(Consumer c: consumers){
-            //System.out.println("Name: " + c.getName() + ", Address: " + c.getAddress() + ", Account Number: " + c.getAccountNumber() + ", Balance: Php" +c.getBalance());
-            System.out.println(c.getName() +"\t\t" + c.getAddress() + "\t\t" +c.getAccountNumber() +"\t\t"+ c.getBalance());
+            System.out.println(c.getName() +"\t\t" + c.getAddress() + "\t\t" +c.getAccountNumber() +"\t\t" +"Php " +c.getBalance());
           }
         }
-      } else if (choice == 4) {
-        // exit the program
-        System.out.println("\nExiting the program. Thank You!");
-
+      } else if (choice == 5) {
+        // save consumers to file and exit
+        try {
+          FileWriter writer = new FileWriter(CONSUMERS_FILE);
+          for (Consumer c : consumers) {
+            String line = c.getName() + "," + c.getAddress() + "," + c.getAccountNumber() + "," + c.getBalance() + "\n";
+            writer.write(line);
+          }
+          writer.close();
+        } catch (Exception e) {
+          System.out.println("Error saving consumers to file.");
+        }
         break;
       } else {
-        System.out.println("\nInvalid choice. Please try again.");
+        System.out.println("\nInvalid choice.");
       }
     }
   }
 }
+
+
+
+
