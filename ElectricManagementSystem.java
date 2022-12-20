@@ -153,6 +153,15 @@ public class ElectricManagementSystem {
     }
 
     while (true) {
+      System.out.println("Welcome to CURUSEKO!");
+      try {
+        Thread.sleep(1000); // delay for 1000 milliseconds (1 second)
+      } catch (InterruptedException e) {
+        // do nothing
+      }
+      System.out.println("\npress Enter key");
+      scanner.nextLine();
+
       System.out.println("\n-----------CURUSEKO-----------");
       System.out.println("1. Register consumer");
       System.out.println("2. Process payment");
