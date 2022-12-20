@@ -133,7 +133,7 @@ public class ElectricManagementSystem {
       System.out.println("2. Process payment");
       System.out.println("3. List consumers");
       System.out.println("4. Exit");
-      System.out.print("Enter choice: ");
+      System.out.print("\nEnter choice: "); //
       int choice = scanner.nextInt();
 
       if (choice == 1) {
@@ -149,11 +149,11 @@ public class ElectricManagementSystem {
         double balance = scanner.nextDouble();
         Consumer consumer = new Consumer(name, address, accountNumber, balance);
         consumers.add(consumer);
-        System.out.println("Consumer registered successfully!");
+        System.out.println("\nConsumer registered successfully!");
       } else if (choice == 2) {
         // process a payment from a consumer
         if (consumers.isEmpty()) {
-          System.out.println("No consumers registered.");
+          System.out.println("\nNo consumers registered.");
         } else {
           System.out.print("Enter consumer account number: ");
           int accountNumber = scanner.nextInt();
@@ -169,11 +169,11 @@ public class ElectricManagementSystem {
           } else {
             System.out.print("Enter payment amount: ");
             double amount = scanner.nextDouble();
-            System.out.println("Select mode of payment:");
+            System.out.println("\nSelect mode of payment:");
             System.out.println("1. Cash");
             System.out.println("2. Check");
             System.out.println("3. Credit card");
-            System.out.print("Enter choice: ");
+            System.out.print("\nEnter choice: ");
             int paymentMode = scanner.nextInt();
             String mode = "\n";
             if (paymentMode == 1) {
@@ -183,30 +183,35 @@ public class ElectricManagementSystem {
             } else if (paymentMode == 3) {
               mode = "Credit card";
             } else {
-              System.out.println("Invalid choice. Payment not processed.");
+              System.out.println("\nInvalid choice. Payment not processed.");
               continue;
             }
             Payment payment = new Payment(consumer, amount, "today", mode);
             consumer.setBalance(payment.getAmount() - consumer.getBalance() );
-            System.out.println("Payment of Php" + payment.getAmount() + " received from " + consumer.getName() + " by " + payment.getMode() + ". New balance: Php" + consumer.getBalance());
+            System.out.println("\nPayment of Php " + payment.getAmount() + " received from " + consumer.getName() + " by " + payment.getMode());
+            System.out.println("New balance: Php " + consumer.getBalance());
           }
         }
       } else if (choice == 3) {
         // list all consumers
         if (consumers.isEmpty()) {
-          System.out.println("No consumers registered.");
+          System.out.println("\nNo consumers registered.");
         } else {
-          System.out.println("Consumers:");
+          System.out.println("\nConsumers:");
+          System.out.println("Name"+"\t\t"+"Address"+"\t\t"+"Account"+"\t\t"+"Balance");
+          System.out.println();
           for(Consumer c: consumers){
-            System.out.println("Name: " + c.getName() + ", Address: " + c.getAddress() + ", Account Number: " + c.getAccountNumber() + ", Balance: Php" +c.getBalance());
+            //System.out.println("Name: " + c.getName() + ", Address: " + c.getAddress() + ", Account Number: " + c.getAccountNumber() + ", Balance: Php" +c.getBalance());
+            System.out.println(c.getName() +"\t\t" + c.getAddress() + "\t\t" +c.getAccountNumber() +"\t\t"+ c.getBalance());
           }
         }
       } else if (choice == 4) {
         // exit the program
-        System.out.println("Exiting the program.");
+        System.out.println("\nExiting the program. Thank You!");
+
         break;
       } else {
-        System.out.println("Invalid choice. Please try again.");
+        System.out.println("\nInvalid choice. Please try again.");
       }
     }
   }
