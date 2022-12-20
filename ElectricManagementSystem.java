@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -123,9 +126,31 @@ class Payment {
   }
 }
 public class ElectricManagementSystem {
+  private static final String CONSUMERS_FILE = "consumers.txt";
+
   public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
     ArrayList<Consumer> consumers = new ArrayList<>();
+
+    // Load consumers from file
+    try {
+      FileReader reader = new FileReader(CONSUMERS_FILE);
+      Scanner fileScanner = new Scanner(reader);
+      while (fileScanner.hasNextLine()) {
+        String line = fileScanner.nextLine();
+        String[] parts = line.split(",");
+        String name = parts[0];
+        String address = parts[1];
+        int accountNumber = Integer.parseInt(parts[2]);
+        double balance = Double.parseDouble(parts[3]);
+        Consumer consumer = new Consumer(name, address, accountNumber, balance);
+        consumers.add(consumer);
+      }
+      reader.close();
+    } catch (Exception e) {
+      // File does not exist or there was an error reading the file.
+      // Either way, we just start with an empty list of consumers.
+    }
 
     while (true) {
       System.out.println("\n-----------CURUSEKO-----------");
@@ -168,6 +193,7 @@ public class ElectricManagementSystem {
             System.out.println("Consumer not found.");
           } else {
             System.out.print("Enter payment amount: ");
+
             double amount = scanner.nextDouble();
             System.out.println("\nSelect mode of payment:");
             System.out.println("1. Cash");
