@@ -138,7 +138,7 @@ public class ElectricManagementSystem {
       Scanner fileScanner = new Scanner(reader);
       while (fileScanner.hasNextLine()) {
         String line = fileScanner.nextLine();
-        String[] parts = line.split(",");
+        String[] parts = line.split("\\|"); // the "\\" is necessary to escape the pipe character
         String name = parts[0];
         String address = parts[1];
         int accountNumber = Integer.parseInt(parts[2]);
@@ -148,9 +148,9 @@ public class ElectricManagementSystem {
       }
       reader.close();
     } catch (Exception e) {
-      // File does not exist or there was an error reading the file.
-      // Either way, we just start with an empty list of consumers.
+      // ...
     }
+
 
     boolean hasSelectedOption = false;
     while (true) {
@@ -170,12 +170,15 @@ public class ElectricManagementSystem {
       System.out.println("2. Process payment");
       System.out.println("3. Add to balance");
       System.out.println("4. List consumers");
-      System.out.println("5. Exit");
+      System.out.println("5. Remove Consumer");
+      System.out.println("6. Exit");
       System.out.print("\nEnter choice: "); //
       int choice = scanner.nextInt();
 
-      if (choice == 1 || choice == 2 || choice == 3 || choice == 4 || choice == 5) {
+      if (choice == 1 || choice == 2 || choice == 3 || choice == 4 || choice == 5 || choice == 6) {
         hasSelectedOption = true;
+      }else{
+        hasSelectedOption = false;
       }
 
       if (choice == 1) {
@@ -192,6 +195,7 @@ public class ElectricManagementSystem {
         Consumer consumer = new Consumer(name, address, accountNumber, balance);
         consumers.add(consumer);
         System.out.println("\nConsumer registered successfully!");
+      
       } else if (choice == 2) {
         // process a payment from a consumer
         if (consumers.isEmpty()) {
@@ -224,6 +228,8 @@ public class ElectricManagementSystem {
               mode = "Check";
             } else if (paymentMode == 3) {
               mode = "Credit card";
+              amount += 20;
+              System.out.println("A fee of Php " + 20 + " will be charged for credit card payments.");
             } else {
               System.out.println("\nInvalid choice. Payment not processed.");
               continue;
@@ -264,13 +270,33 @@ public class ElectricManagementSystem {
           System.out.println("\nNo consumers registered.");
         } else {
           System.out.println("\nConsumers:");
-          System.out.println("Name"+"\t\t"+"Address"+"\t\t"+"Account"+"\t\t"+"Balance");
+          System.out.println("Name"+"\t\t"+"Address"+"\t\t\t\t"+"Account"+"\t\t"+"Balance");
           System.out.println();
           for(Consumer c: consumers){
             System.out.println(c.getName() +"\t\t" + c.getAddress() + "\t\t" +c.getAccountNumber() +"\t\t" +"Php " +c.getBalance());
           }
         }
-      } else if (choice == 5) {
+      }else if (choice == 5) {
+        if (consumers.isEmpty()) {
+          System.out.println("\nNo consumers registered.");
+        } else {
+          System.out.print("Enter consumer account number: ");
+          int accountNumber = scanner.nextInt();
+          Consumer consumer = null;
+          for (Consumer c : consumers) {
+            if (c.getAccountNumber() == accountNumber) {
+              consumer = c;
+              break;
+            }
+          }
+          if (consumer == null){
+            System.out.println("Consumer not found.");
+          } else {
+            consumers.remove(consumer);
+            System.out.println("\nConsumer removed successfully!");
+          }
+        } 
+      } else if (choice == 6) {
         // save consumers to file and exit
         try {
           FileWriter writer = new FileWriter(CONSUMERS_FILE);
